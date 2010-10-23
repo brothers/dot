@@ -1,0 +1,31 @@
+[[ -r ~/.environ ]] && source ~/.environ
+[[ -r ~/.aliases ]] && source ~/.aliases
+
+# History
+[[ -z $PROMPT_COMMAND ]] && PROMPT_COMMAND='history -a'
+HISTCONTROL=ignoreboth
+HISTSIZE=1048576
+HISTFILESIZE=1048576
+shopt -s histappend
+shopt -s histverify
+
+# Prompts
+PROMPT='\w \$ '
+STATUS='$(status=$?;[[ $status == 0 ]] || echo "[$status] ")'
+HOSTNAME=$(uname -n)
+HOST=${HOSTNAME%%.*}
+case "$TERM" in
+    screen)
+        TITLEBAR="\[\033k${HOST}\033\134\]"
+        ;;
+    xterm-color)
+        TERM=xterm
+        TITLEBAR="\[\033]0;${HOST}\007\]"
+        ;;
+    xterm)
+        TITLEBAR="\[\033]0;${HOST}\007\]"
+        ;;
+esac
+HARDSTATUS="\[\033_\033\134\]"
+PS1="${STATUS}${PROMPT}${TITLEBAR}${HARDSTATUS}"
+PS2='  '

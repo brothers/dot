@@ -1,0 +1,20 @@
+escape ^tt
+
+caption always "%-w%{kW}%n %t%? (%u)%?%{-}%+w"
+defscrollback 65536
+startup_message off
+vbell off
+
+bind  > select 10
+bind  ! select 11
+bind  @ select 12
+bind \# select 13
+bind  $ select 14
+bind  % select 15
+bind \^ select 16
+bind  & select 17
+bind  * select 18
+bind  < select 19
+bind  k focus up
+bind  j focus down
+bind  o only

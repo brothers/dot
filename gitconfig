@@ -1,0 +1,13 @@
+[core]
+	editor = vim
+[user]
+	name = Jared Brothers
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+	unstage = reset HEAD --
+	last = log -1 HEAD
+	ready = log origin/master..HEAD
+	rewind = rebase origin/master

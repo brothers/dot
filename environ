@@ -1,0 +1,60 @@
+
+# Paths
+function pathmunge () {
+    if ! echo $PATH | grep "\(^\|:\)$1\($\|:\)" >/dev/null 2>&1; then
+        if [ "$2" = "after" ] ; then
+            export PATH=$PATH:$1
+        else  
+            export PATH=$1:$PATH
+        fi
+    fi
+}
+pathmunge ${HOME}/bin after
+pathmunge /bin
+pathmunge /sbin
+pathmunge /usr/bin
+pathmunge /usr/sbin
+pathmunge /opt/local/bin
+pathmunge /opt/local/sbin
+
+# Java Virtual Machine
+JAVAS=(
+    # CentOS Sun JDK
+    /usr/java/default
+    # CentOS OpenJDK
+    /usr/lib/jvm/java
+    # Debian
+    /usr/lib/jvm/default-java
+    # OS X
+    /System/Library/Frameworks/JavaVM.framework/Home
+)
+for JAVA in ${JAVAS[@]}; do
+    if [ -d $JAVA ]; then
+        export JAVA_HOME=$JAVA
+    fi
+done
+
+# Amazon EC2 API tools
+if [ -d ${HOME}/ec2 ]; then
+    export EC2_HOME=${HOME}/ec2
+    pathmunge $EC2_HOME/bin after
+    export EC2_PRIVATE_KEY=$(ls $EC2_HOME/pk-*.pem 2>/dev/null)
+    export EC2_CERT=$(ls $EC2_HOME/cert-*.pem 2>/dev/null)
+    export EC2_REGION=us-east-1
+    export EC2_URL=https://${EC2_REGION}.ec2.amazonaws.com/
+fi
+
+# Perl local::lib configs for CPAN
+if [ -d ${HOME}/perl5/lib/perl5 ]; then
+    eval $(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)
+fi
+
+# Python interpreter startup
+if [ -r ${HOME}/.pythonrc ]; then
+    export PYTHONSTARTUP=${HOME}/.pythonrc
+fi
+
+# Load ssh-agent variables
+if ! ssh-add -l >/dev/null 2>&1; then
+    [ -r ${HOME}/.ssh/environ ] && source ${HOME}/.ssh/environ
+fi

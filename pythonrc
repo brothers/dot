@@ -1,0 +1,33 @@
+import sys, os.path, atexit
+from itertools import *
+
+# Change prompts to something more reasonable.
+sys.ps1 = '> '
+sys.ps2 = '  '
+
+# Enable tab completion from readline.
+try:
+    import readline
+except ImportError:
+    pass
+else:
+    import rlcompleter
+
+class irlcompleter(rlcompleter.Completer):
+    def complete(self, text, state):
+        if text == "":
+            readline.insert_text('\t')
+            return None
+        else:
+            return rlcompleter.Completer.complete(self,text,state)
+
+readline.parse_and_bind("tab: complete")
+readline.set_completer(irlcompleter().complete)
+
+# Restore our command-line history, and save it when Python exits.
+pyhistory = os.path.expanduser("~/.pyhistory")
+try:
+    readline.read_history_file(pyhistory)
+except IOError:
+    pass
+atexit.register(lambda: readline.write_history_file(pyhistory))
