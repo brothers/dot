@@ -1,9 +1,9 @@
-# Shell aliases
-function has () { which "$1" >/dev/null 2>&1; }
+# Shell aliases and functions
+has() { which "$1" >/dev/null 2>&1; }
 
 alias f='last -n 16'
 alias noheader="awk 'NR>1{print}'"
-alias psort="ps -ef|noheader|sort -n -k3,3 -k2,2"
+alias psort="ps -ef|noheader|sort -n -k3,3"
 alias pull='for i in ${HOME}/src/*; do (cd $i; git pull); done'
 alias s=ssh
 alias trim="grep '^[[:blank:]]*[^#[:blank:]]'"
@@ -11,13 +11,13 @@ has vim && alias vi=vim
 
 # Save and restore ssh-agent variables
 alias S='ssh-save; screen -d -R'
-function ssh-save () {
+ssh-save() {
     SSHVARS=(SSH_CLIENT SSH_TTY SSH_AUTH_SOCK SSH_CONNECTION DISPLAY)
     for x in ${SSHVARS[@]} ; do
         echo "export $x=\"$(eval echo \$$x)\""
     done 1>$HOME/.ssh/environ
 }
-function ssh-keys () {
+ssh-keys() {
     if ssh-add -l >/dev/null 2>&1
     then
         ssh-add -l
@@ -28,10 +28,10 @@ function ssh-keys () {
 }
 
 # Paste error to remove a known_hosts entry
-function Offending () { unknown_host "$@"; }
-function Matching  () { unknown_host "$@"; }
+Offending() { unknown_host "$@"; }
+Matching() { unknown_host "$@"; }
 
-function unknown_host () {
+unknown_host() {
     eval "value=${!#}"
 
     if [ "$#" -lt 1 ] ; then
@@ -44,12 +44,12 @@ function unknown_host () {
         exit 1
     fi
 
-    echo "$value" | awk -F: '{print "sed -i.old -e "$2"d",$1}' | sh -x
+    echo "$value" | awk -F: '{print "sed -i .old -e "$2"d",$1}' | sh -x
 }
 
 # Print lines after the first arg matches,
 # until the (optional) second arg matches.
-function span () {
+span() {
     perl -ne "BEGIN{my \$flag=0};
         if(/$1/){\$flag=1};
         if(\$flag==1){print};
@@ -65,10 +65,10 @@ export CHECK_LOCKS='SELECT pg_stat_activity.datname,
     substr(pg_stat_activity.current_query,1,60),
     pg_stat_activity.query_start,
     age(now(),pg_stat_activity.query_start) as "age",
-    pg_stat_activity.procpid 
+    pg_stat_activity.procpid
         FROM pg_stat_activity,
-    pg_locks LEFT OUTER JOIN pg_class on 
-        (pg_locks.relation = pg_class.oid) 
+    pg_locks LEFT OUTER JOIN pg_class on
+        (pg_locks.relation = pg_class.oid)
             WHERE pg_locks.pid=pg_stat_activity.procpid
             ORDER BY query_start'
 alias check_locks="sudo -u postgres psql -x -c '$CHECK_LOCKS'"
