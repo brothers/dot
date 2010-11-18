@@ -1,10 +1,13 @@
+# Environment variables
+has vim && export EDITOR=vim
+has less && export PAGER=less
 
 # Paths
 function pathmunge () {
     if ! echo $PATH | grep "\(^\|:\)$1\($\|:\)" >/dev/null 2>&1; then
         if [ "$2" = "after" ] ; then
             export PATH=$PATH:$1
-        else  
+        else
             export PATH=$1:$PATH
         fi
     fi
