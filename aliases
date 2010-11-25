@@ -3,6 +3,7 @@ has() { which "$1" >/dev/null 2>&1; }
 
 alias f='last -n 16'
 alias noheader="awk 'NR>1{print}'"
+alias randline="awk 'BEGIN{srand()}{if(int(NR*rand())==0){p=\$0}}END{print p}'"
 alias psort="ps -ef|noheader|sort -n -k3,3"
 alias pull='for i in ${HOME}/src/*; do (cd $i; git pull); done'
 alias s=ssh
