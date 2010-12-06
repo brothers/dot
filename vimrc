@@ -3,7 +3,7 @@ set nocompatible
 set autoindent
 set background=light
 set backspace=indent,eol,start
-set copyindent
+set autoindent
 set expandtab
 set hidden
 set ignorecase
