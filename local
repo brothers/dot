@@ -44,6 +44,7 @@ pathmunge /usr/bin
 pathmunge /usr/sbin
 pathmunge /opt/local/bin
 pathmunge /opt/local/sbin
+pathmunge /opt/local/lib/postgresql90/bin
 
 # Includes
 [[ -r ~/.aliases ]] && source ~/.aliases
