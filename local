@@ -29,6 +29,7 @@ PS2='  '
 
 # Paths
 function pathmunge () {
+    test -d "$1" || return 1
     if ! echo $PATH | grep "\(^\|:\)$1\($\|:\)" >/dev/null 2>&1; then
         if [ "$2" = "after" ] ; then
             export PATH=$PATH:$1
