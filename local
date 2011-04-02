@@ -14,6 +14,7 @@ HOST=${HOSTNAME%%.*}
 case "$TERM" in
     screen)
         TITLEBAR="\[\033k${HOST}\033\134\]"
+        HARDSTATUS="\[\033_\033\134\]"
         ;;
     xterm-color)
         TERM=xterm
@@ -23,7 +24,6 @@ case "$TERM" in
         TITLEBAR="\[\033]0;${HOST}\007\]"
         ;;
 esac
-HARDSTATUS="\[\033_\033\134\]"
 PS1="${STATUS}${PROMPT}${TITLEBAR}${HARDSTATUS}"
 PS2='  '
 
